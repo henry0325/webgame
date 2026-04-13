@@ -8,9 +8,7 @@
   --bad: #ff8d8d;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -28,6 +26,14 @@ body {
 }
 
 .subtitle { opacity: 0.9; }
+.tiny { font-size: 0.9rem; opacity: 0.88; }
+
+.mode-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
 
 .panel {
   background: var(--panel);
@@ -46,6 +52,21 @@ body {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 10px;
   padding: 12px;
+}
+
+.mission-panel ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 4px;
+}
+
+.rhythm-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .beat-track {
@@ -113,9 +134,14 @@ button.primary {
   font-weight: 700;
 }
 
-.log {
-  min-height: 22px;
-  opacity: 0.95;
+.log { min-height: 24px; }
+
+.equipped {
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px dashed #7df9ff;
+  border-radius: 8px;
+  background: rgba(125, 249, 255, 0.1);
 }
 
 .inventory-grid {
@@ -133,6 +159,11 @@ button.primary {
   background: #232945;
 }
 
+.item:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
 .item.common { border-color: #6b739d; }
 .item.rare { border-color: #72a7ff; }
 .item.epic { border-color: #d991ff; }
@@ -140,3 +171,6 @@ button.primary {
 .good { color: var(--good); }
 .warn { color: var(--warn); }
 .bad { color: var(--bad); }
+
+.chaos-1 { transform: rotate(0.2deg); }
+.chaos-2 { transform: rotate(-0.4deg) translateX(1px); }
