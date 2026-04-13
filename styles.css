@@ -18,7 +18,7 @@ body {
 }
 
 .container {
-  max-width: 960px;
+  max-width: 1024px;
   margin: 0 auto;
   padding: 20px;
   display: grid;
@@ -42,9 +42,24 @@ body {
   padding: 16px;
 }
 
+.art-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.art-panel img {
+  width: 100%;
+  max-height: 140px;
+  object-fit: contain;
+  border: 1px solid #434f81;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
 .status-panel {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
 }
 
@@ -174,3 +189,20 @@ button.primary {
 
 .chaos-1 { transform: rotate(0.2deg); }
 .chaos-2 { transform: rotate(-0.4deg) translateX(1px); }
+
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.rhythm-hit {
+  animation: pulse 0.2s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+  100% { transform: scale(1); }
+}

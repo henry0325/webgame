@@ -1,15 +1,29 @@
 (function (global) {
   function evaluateTiming(markerPosition) {
+    return evaluateTimingWithAssist(markerPosition, 0);
+  }
+
+  function evaluateTimingWithAssist(markerPosition, assist = 0) {
     const distance = Math.abs(markerPosition - 50);
-    if (distance <= 4) return { rating: 'Perfect', multiplier: 1.8, comfort: 8 };
-    if (distance <= 10) return { rating: 'Great', multiplier: 1.35, comfort: 4 };
-    if (distance <= 18) return { rating: 'Good', multiplier: 1.05, comfort: 2 };
+    const perfectWindow = 4 + assist;
+    const greatWindow = 10 + assist;
+    const goodWindow = 18 + assist;
+
+    if (distance <= perfectWindow) return { rating: 'Perfect', multiplier: 1.8, comfort: 8 };
+    if (distance <= greatWindow) return { rating: 'Great', multiplier: 1.35, comfort: 4 };
+    if (distance <= goodWindow) return { rating: 'Good', multiplier: 1.05, comfort: 2 };
     return { rating: 'Miss', multiplier: 0.2, comfort: -3 };
   }
 
   function calculateDamage(baseDamage, multiplier, combo, gearBonus) {
     const comboBonus = 1 + Math.min(combo, 20) * 0.03;
     return Math.max(1, Math.round(baseDamage * multiplier * comboBonus + (gearBonus || 0)));
+  }
+
+  function bpmRiskMultiplier(bpm) {
+    if (bpm <= 90) return 1;
+    if (bpm >= 160) return 1.35;
+    return +(1 + ((bpm - 90) / 70) * 0.35).toFixed(2);
   }
 
   function autoSortInventory(items) {
@@ -55,14 +69,31 @@
     while (picked.length < 3) {
       const idx = Math.floor(rand() * source.length);
       const choice = source[idx];
-      if (!picked.some((x) => x.id === choice.id)) {
-        picked.push({ ...choice, progress: 0, done: false });
-      }
+      if (!picked.some((x) => x.id === choice.id)) picked.push({ ...choice, progress: 0, done: false });
     }
     return picked;
   }
 
-  const api = { evaluateTiming, calculateDamage, autoSortInventory, getComfortEffects, seedFromDate, seededRandom, buildMissions };
+  function applyProfileExp(profile, gainedExp) {
+    const next = { ...profile, exp: profile.exp + gainedExp };
+    while (next.exp >= next.level * 100) {
+      next.exp -= next.level * 100;
+      next.level += 1;
+      next.permBonus += 1;
+      next.points = (next.points || 0) + 1;
+    }
+    return next;
+  }
+
+  function skillTreeEffects(skills = {}) {
+    return {
+      timingAssist: (skills.timing || 0) * 1,
+      guard: (skills.guard || 0),
+      loot: 1 + (skills.loot || 0) * 0.2
+    };
+  }
+
+  const api = { evaluateTiming, evaluateTimingWithAssist, calculateDamage, bpmRiskMultiplier, autoSortInventory, getComfortEffects, seedFromDate, seededRandom, buildMissions, applyProfileExp, skillTreeEffects };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   global.GameLogic = api;
