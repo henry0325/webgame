@@ -1,0 +1,142 @@
+:root {
+  --bg: #121421;
+  --panel: #1d2134;
+  --text: #f8faff;
+  --accent: #7df9ff;
+  --good: #8cff8c;
+  --warn: #ffda7d;
+  --bad: #ff8d8d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Sans TC", system-ui, -apple-system, sans-serif;
+  background: radial-gradient(circle at top, #2a3050, var(--bg));
+  color: var(--text);
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.subtitle { opacity: 0.9; }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid #363d61;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.status-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.status-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.beat-track {
+  position: relative;
+  height: 28px;
+  border: 1px solid #4f5b96;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(to right, #323d70, #2b2f45);
+}
+
+.beat-target {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16%;
+  height: 100%;
+  background: rgba(125, 249, 255, 0.25);
+  border-left: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+}
+
+.beat-marker {
+  position: absolute;
+  top: 0;
+  width: 14px;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 999px;
+  transform: translateX(-50%);
+}
+
+.actions {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.action {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid #4f5b96;
+  border-radius: 8px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.action.selected {
+  border-color: var(--accent);
+  background: rgba(125, 249, 255, 0.12);
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  color: #04253a;
+  font-weight: 700;
+}
+
+.log {
+  min-height: 22px;
+  opacity: 0.95;
+}
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(80px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.item {
+  border: 1px solid #4f5b96;
+  border-radius: 8px;
+  text-align: center;
+  padding: 8px 4px;
+  background: #232945;
+}
+
+.item.common { border-color: #6b739d; }
+.item.rare { border-color: #72a7ff; }
+.item.epic { border-color: #d991ff; }
+
+.good { color: var(--good); }
+.warn { color: var(--warn); }
+.bad { color: var(--bad); }
