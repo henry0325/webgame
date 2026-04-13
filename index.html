@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>諧音地下城：節奏遠征</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>諧音地下城：節奏遠征</h1>
+        <p class="subtitle">TRPG 敘事 × 諧音惡搞 × 節奏戰鬥 × 舒適度系統</p>
+        <div class="mode-row">
+          <button id="mode-arcade" class="primary">標準遠征</button>
+          <button id="mode-daily">每日挑戰</button>
+          <p id="mode-note" class="tiny">標準遠征：完整 5 波戰鬥。</p>
+        </div>
+      </header>
+
+      <section class="panel status-panel">
+        <div class="status-card">
+          <h2>玩家</h2>
+          <p>HP: <span id="player-hp">100</span></p>
+          <p>連擊: <span id="combo">0</span></p>
+          <p>舒適度: <span id="comfort">0</span></p>
+          <p>狀態: <span id="comfort-tier">Normal</span></p>
+          <p>分數: <span id="score">0</span></p>
+        </div>
+        <div class="status-card">
+          <h2>敵人</h2>
+          <p id="enemy-name">鴨力山大魔王</p>
+          <p>HP: <span id="enemy-hp">100</span></p>
+          <p>關卡: <span id="wave">1 / 5</span></p>
+          <p id="enemy-line">「今天你有多鴨力？」</p>
+          <p class="tiny">每日最高分: <span id="daily-best">0</span></p>
+        </div>
+      </section>
+
+      <section class="panel mission-panel">
+        <h3>本輪任務（高留存玩法）</h3>
+        <ul id="missions"></ul>
+      </section>
+
+      <section class="panel rhythm-panel" id="rhythm-panel">
+        <div class="rhythm-header">
+          <h3>節奏判定（空白鍵或 Enter）</h3>
+          <label>BPM
+            <input id="bpm-input" type="range" min="70" max="140" value="90" />
+            <span id="bpm-value">90</span>
+          </label>
+          <button id="metronome-toggle">開啟節拍音</button>
+        </div>
+        <div class="beat-track" aria-label="beat track">
+          <div class="beat-target"></div>
+          <div id="beat-marker" class="beat-marker"></div>
+        </div>
+        <p>判定: <strong id="timing-result">等待輸入</strong></p>
+        <p id="comfort-effect" class="tiny"></p>
+      </section>
+
+      <section class="panel action-panel">
+        <h3>選擇諧音技能（按 1 / 2 / 3）</h3>
+        <div id="actions" class="actions"></div>
+        <button id="hit-button" class="primary">在拍點出招</button>
+        <p id="log" class="log"></p>
+      </section>
+
+      <section class="panel ocd-panel">
+        <h3>背包與裝備（戰鬥融合）</h3>
+        <p class="tiny">打倒怪物會掉落符文，點擊即可裝備。裝備會直接影響技能傷害與舒適度。</p>
+        <div id="equipped" class="equipped">尚未裝備符文</div>
+        <div id="inventory" class="inventory-grid"></div>
+        <button id="sort-button">一鍵整齊收納</button>
+      </section>
+    </main>
+
+    <script src="logic.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>
