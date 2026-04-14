@@ -37,10 +37,10 @@
     { name: '蕉流閃電', icon:'🍌', base: 13, tag: '節奏連段', text: '香蕉導電，命中神速。' },
     { name: '蝦趴音浪', icon:'🦐', base: 11, tag: '舒適連動', text: '全場蝦趴，怪物跟著搖。' }
   ];
-  const PUZZLES = [
-    { question: '同事說「我今天被鴨到」，最可能是在描述什麼？', options: ['被鴨子追', '壓力很大', '想吃烤鴨', '買到黃色外套'], answer: 1, success: '答對！你看穿了雙關，壓力下降。', fail: '答錯！敵人笑你聽不懂梗。' },
-    { question: '「蒜你狠」在本作戰鬥語境裡偏向哪種屬性？', options: ['高風險高傷', '回血防禦', '召喚分身', '偷取裝備'], answer: 0, success: '答對！你抓到招式定位。', fail: '答錯！節奏判斷被干擾。' },
-    { question: '要打出高傷，以下何者最關鍵？', options: ['一直狂點', '配合節拍命中窗口', '只靠高等裝備', '每次都換招'], answer: 1, success: '答對！節奏才是核心。', fail: '答錯！你的攻擊節奏被拉亂。' }
+  const CIPHER_RULES = [
+    { id: 'low_to_high', label: '基礎傷害由低到高', solve: (acts) => [...acts].map((a, i) => ({ i, v: a.base })).sort((a, b) => a.v - b.v).map((x) => x.i) },
+    { id: 'high_to_low', label: '基礎傷害由高到低', solve: (acts) => [...acts].map((a, i) => ({ i, v: a.base })).sort((a, b) => b.v - a.v).map((x) => x.i) },
+    { id: 'name_short_first', label: '招式名稱由短到長', solve: (acts) => [...acts].map((a, i) => ({ i, v: a.name.length })).sort((a, b) => a.v - b.v).map((x) => x.i) }
   ];
 
   const state = {
@@ -52,7 +52,7 @@
     inventory: new Map(), equippedId: null, actions: [], missions: [],
     enemy: ENEMIES[0], bossCharge: 0, mode: 'arcade', dead: false, continueTokens: 1,
     messages: [], msgFilter: 'all', stats: { perfect: 0, miss: 0, totalDamage: 0, attacks: 0 }, settings: { assistMode: true, highContrast: false }, metronomeOn: false, audioCtx: null, nextBeat: 0,
-    puzzle: { active: false, question: '', options: [], answer: -1, selected: -1, success: '', fail: '' }
+    cipher: { ruleId: '', ruleLabel: '', target: [], input: [], bonusReady: false }
   };
 
   const $ = (id) => document.getElementById(id);
@@ -70,8 +70,7 @@
     filterAll:$('filter-all'), filterCombat:$('filter-combat'), filterLoot:$('filter-loot'), filterSystem:$('filter-system'),
     statPerfect:$('stat-perfect'), statMiss:$('stat-miss'), statDamage:$('stat-damage'),
     assistMode:$('assist-mode'), highContrast:$('high-contrast'),
-    puzzlePanel:$('puzzle-panel'), puzzleWaveTag:$('puzzle-wave-tag'), puzzleQuestion:$('puzzle-question'),
-    puzzleOptions:$('puzzle-options'), puzzleSubmit:$('puzzle-submit')
+    cipherPanel:$('cipher-panel'), cipherRule:$('cipher-rule'), cipherHint:$('cipher-hint'), cipherProgress:$('cipher-progress')
   };
 
   const loadProfile = () => {
@@ -140,35 +139,37 @@
     state.selected = Math.min(state.selected, state.actions.length - 1);
   }
 
-  function maybeStartPuzzle() {
-    const shouldStart = state.wave % 2 === 0 || state.enemy.boss;
-    if (!shouldStart) {
-      state.puzzle = { active: false, question: '', options: [], answer: -1, selected: -1, success: '', fail: '' };
-      return;
-    }
+  function setupCipherForWave() {
     const rand = seededRandom(state.runSeed + state.wave * 503 + state.cycle * 997);
-    const picked = PUZZLES[Math.floor(rand() * PUZZLES.length)];
-    state.puzzle = { active: true, question: picked.question, options: picked.options, answer: picked.answer, selected: -1, success: picked.success, fail: picked.fail };
-    pushMsg('system', '解謎回合啟動：答題後獲得戰場修正', true);
+    const rule = CIPHER_RULES[Math.floor(rand() * CIPHER_RULES.length)];
+    state.cipher.ruleId = rule.id;
+    state.cipher.ruleLabel = rule.label;
+    state.cipher.target = rule.solve(state.actions);
+    state.cipher.input = [];
+    state.cipher.bonusReady = false;
+    pushMsg('system', `節奏密碼更新：${rule.label}`, true);
   }
 
-  function solvePuzzle() {
-    if (!state.puzzle.active || state.puzzle.selected < 0) return;
-    const ok = state.puzzle.selected === state.puzzle.answer;
-    if (ok) {
-      state.comfort += 6;
-      state.score += 80;
-      state.danger = Math.max(0.8, +(state.danger - 0.03).toFixed(2));
-      pushMsg('system', state.puzzle.success, true);
-      el.log.textContent = '解謎成功：舒適度+6、分數+80、危險度微降';
-    } else {
-      state.hp = Math.max(1, state.hp - 8);
-      state.enemyHp = Math.round(state.enemyHp * 1.1);
-      pushMsg('system', state.puzzle.fail, true);
-      el.log.textContent = '解謎失敗：HP-8，敵人獲得10%護持';
+  function checkCipherInput(selectedIdx, judgeRating) {
+    if (judgeRating === 'Miss') {
+      state.cipher.input = [];
+      state.comfort = Math.max(0, state.comfort - 2);
+      pushMsg('system', '密碼鏈中斷：Miss 使線索重置', true);
+      return;
     }
-    state.puzzle.active = false;
-    renderAll();
+    state.cipher.input.push(selectedIdx);
+    if (state.cipher.input.length < 3) return;
+    const ok = state.cipher.input.every((v, i) => v === state.cipher.target[i]);
+    if (ok) {
+      state.cipher.bonusReady = true;
+      state.score += 60;
+      state.comfort += 4;
+      pushMsg('system', '密碼破解成功：下次攻擊傷害強化', true);
+    } else {
+      state.hp = Math.max(1, state.hp - 6);
+      pushMsg('system', '密碼錯誤：受到反震傷害 -6HP', true);
+    }
+    state.cipher.input = [];
   }
 
   function resetRun(mode) {
@@ -184,7 +185,7 @@
     const rand = seededRandom(state.runSeed);
     state.missions = buildMissions(rand);
     drawActionsForCurrentWave();
-    maybeStartPuzzle();
+    setupCipherForWave();
     state.messages = [];
     state.stats = { perfect: 0, miss: 0, totalDamage: 0, attacks: 0 };
     pushMsg('system', '新冒險開始', true);
@@ -237,7 +238,6 @@
     });
     const act = state.actions[state.selected];
     el.actionDetail.textContent = `快捷鍵 ${state.selected+1}｜${act.name}｜基礎${act.base}｜${act.tag}｜每波招式固定｜節拍輔助+${tree.timingAssist}`;
-    if (el.hit) el.hit.disabled = state.puzzle.active;
 
     const eq = state.equippedId ? itemById(state.equippedId) : null;
     el.equipped.textContent = eq ? `${eq.name} (ATK+${eq.atk}, COM+${eq.comfort})` : '尚未裝備';
@@ -276,18 +276,11 @@
     if (el.filterCombat) el.filterCombat.disabled = state.msgFilter === 'combat';
     if (el.filterLoot) el.filterLoot.disabled = state.msgFilter === 'loot';
     if (el.filterSystem) el.filterSystem.disabled = state.msgFilter === 'system';
-    if (el.puzzlePanel) el.puzzlePanel.classList.toggle('hidden', !state.puzzle.active);
-    if (el.puzzleWaveTag) el.puzzleWaveTag.textContent = state.puzzle.active ? `Wave ${state.wave}C${state.cycle}` : '';
-    if (el.puzzleQuestion) el.puzzleQuestion.textContent = state.puzzle.question || '';
-    if (el.puzzleOptions) {
-      el.puzzleOptions.innerHTML = '';
-      state.puzzle.options.forEach((opt, idx) => {
-        const b = document.createElement('button');
-        b.className = `puzzle-option ${state.puzzle.selected === idx ? 'selected' : ''}`;
-        b.textContent = `${idx + 1}. ${opt}`;
-        b.onclick = () => { state.puzzle.selected = idx; renderAll(); };
-        el.puzzleOptions.appendChild(b);
-      });
+    if (el.cipherRule) el.cipherRule.textContent = state.cipher.ruleLabel ? `規則：${state.cipher.ruleLabel}` : '';
+    if (el.cipherHint) el.cipherHint.textContent = `用 3 次命中依規則輸入招式順序。Miss 會重置密碼鏈。`;
+    if (el.cipherProgress) {
+      const names = state.cipher.input.map((idx) => state.actions[idx]?.name || '?').join(' → ') || '（尚未輸入）';
+      el.cipherProgress.textContent = `當前鏈：${names}${state.cipher.bonusReady ? '｜已解鎖強化攻擊' : ''}`;
     }
   }
 
@@ -325,7 +318,7 @@
     state.enemyHp = scaledHp(state.enemy);
     state.bossCharge = 0;
     drawActionsForCurrentWave();
-    maybeStartPuzzle();
+    setupCipherForWave();
 
     if (state.settings.assistMode && state.stats.attacks % 20 === 0) {
       const missRate = state.stats.miss / Math.max(1, state.stats.attacks);
@@ -373,10 +366,6 @@
 
   function attack() {
     if (state.hp <= 0 || state.dead) return;
-    if (state.puzzle.active) {
-      el.log.textContent = '先完成解謎回合，才能繼續出招。';
-      return;
-    }
     const skill = state.actions[state.selected];
     const tree = skillTreeEffects(state.profile.skills);
     const judge = evaluateTimingWithAssist(state.marker, tree.timingAssist);
@@ -393,7 +382,13 @@
     if (judge.rating === 'Perfect') missionTick('perfect', 1);
 
     const gear = eq.atk + state.profile.permBonus + comfort.damageBonus;
-    const damage = Math.round(calculateDamage(skill.base, judge.multiplier, state.combo, gear) * bpmRiskMultiplier(state.bpm));
+    let damage = Math.round(calculateDamage(skill.base, judge.multiplier, state.combo, gear) * bpmRiskMultiplier(state.bpm));
+    checkCipherInput(state.selected, judge.rating);
+    if (state.cipher.bonusReady && judge.rating !== 'Miss') {
+      damage = Math.round(damage * 1.6);
+      state.cipher.bonusReady = false;
+      pushMsg('combat', '密碼強化觸發：本次傷害 x1.6', true);
+    }
     state.stats.totalDamage += damage;
     state.enemyHp = Math.max(0, state.enemyHp - damage);
 
@@ -498,7 +493,6 @@
   if (el.filterCombat) el.filterCombat.onclick = () => { state.msgFilter = 'combat'; renderAll(); };
   if (el.filterLoot) el.filterLoot.onclick = () => { state.msgFilter = 'loot'; renderAll(); };
   if (el.filterSystem) el.filterSystem.onclick = () => { state.msgFilter = 'system'; renderAll(); };
-  if (el.puzzleSubmit) el.puzzleSubmit.onclick = solvePuzzle;
 
 
   if (el.assistMode) {

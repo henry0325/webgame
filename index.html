@@ -65,14 +65,13 @@
             </div>
             <div id="message-feed" class="message-feed" role="log" aria-live="polite"></div>
           </section>
-          <section id="puzzle-panel" class="puzzle-panel cardlike hidden" aria-label="戰鬥解謎">
-            <div class="puzzle-head">
-              <strong>解謎回合</strong>
-              <span id="puzzle-wave-tag" class="small"></span>
+          <section id="cipher-panel" class="cipher-panel cardlike" aria-label="節奏密碼">
+            <div class="cipher-head">
+              <strong>節奏密碼</strong>
+              <span id="cipher-rule" class="small"></span>
             </div>
-            <p id="puzzle-question" class="small"></p>
-            <div id="puzzle-options" class="puzzle-options"></div>
-            <button id="puzzle-submit">提交答案</button>
+            <p id="cipher-hint" class="small"></p>
+            <p id="cipher-progress" class="small"></p>
           </section>
           <div class="battle-stats small">Perfect <span id="stat-perfect">0</span>｜Miss <span id="stat-miss">0</span>｜總傷害 <span id="stat-damage">0</span></div>
           <div id="gameover-actions" class="gameover-actions hidden">
