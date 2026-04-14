@@ -53,6 +53,10 @@
           <button id="hit-button" class="primary">出招（Space/Enter）</button>
           <p id="timing-result">等待輸入</p>
           <p id="log" class="small"></p>
+          <div id="gameover-actions" class="gameover-actions hidden">
+            <button id="continue-button">消耗1次重整續關</button>
+            <button id="restart-button">重新開始</button>
+          </div>
           <div class="battle-bottom">
             <section id="cipher-panel" class="cipher-panel cardlike" aria-label="節奏密碼">
               <div class="cipher-head">
@@ -78,10 +82,6 @@
             </section>
           </div>
           <div class="battle-stats small">Perfect <span id="stat-perfect">0</span>｜Miss <span id="stat-miss">0</span>｜總傷害 <span id="stat-damage">0</span></div>
-          <div id="gameover-actions" class="gameover-actions hidden">
-            <button id="continue-button">消耗1次重整續關</button>
-            <button id="restart-button">重新開始</button>
-          </div>
         </div>
 
         <aside class="side card">
