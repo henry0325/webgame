@@ -11,7 +11,7 @@ body{overflow:hidden}
 .portrait-card{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center}
 .portrait-card img{width:100%;height:100%;object-fit:contain;background:linear-gradient(180deg,#f5ecd5,#dac9aa);border-radius:8px;border:1px solid #7b6a4d}
 .battle{display:grid;grid-template-columns:2fr 1fr;gap:8px;min-height:0}
-.rhythm{display:grid;grid-template-rows:auto 34px auto auto auto auto auto auto;gap:8px;min-height:0}
+.rhythm{display:grid;grid-template-rows:auto 34px auto auto auto minmax(150px,1fr) auto auto;gap:8px;min-height:0}
 .rhythm-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .track{position:relative;border:1px solid #4d62aa;border-radius:999px;height:28px;background:linear-gradient(90deg,#2e396d,#212747)}
 .target{position:absolute;left:50%;transform:translateX(-50%);width:16%;height:100%;border-inline:2px solid var(--accent);background:rgba(125,249,255,.2)}
@@ -47,10 +47,13 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 .skill-card{display:grid;gap:4px;background:#252f5d;color:#fff;border:1px solid #5c6fbb;text-align:left}
 .skill-card span{font-weight:700;color:#7df9ff}
 .skill-card small{opacity:.85}
-.feed-panel{display:grid;grid-template-rows:auto auto;gap:6px;min-height:0}
+.battle-bottom{display:grid;grid-template-columns:1.1fr 1.4fr;gap:8px;min-height:0}
+.feed-panel{display:grid;grid-template-rows:auto minmax(0,1fr);gap:6px;min-height:0}
 .feed-head{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
 .message-feed{
-  height:clamp(7rem, 14vh, 11rem);
+  height:100%;
+  min-height:8.5rem;
+  max-height:12.5rem;
   overflow:auto;
   border:1px solid #3d4a88;
   background:#1a1f3c;
@@ -65,8 +68,11 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 .feed-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .feed-tools button{background:#303c72;color:#fff;font-size:.78rem;padding:4px 8px}
 .cardlike{border:1px solid #3e4f8f;border-radius:8px;background:#202956;padding:8px}
-.cipher-panel{display:grid;gap:6px}
+.cipher-panel{display:grid;grid-template-rows:auto auto auto auto auto;gap:6px;min-height:0}
 .cipher-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#cipher-rule{background:#2a3a78;border:1px solid #4f67bc;padding:2px 8px;border-radius:999px}
+#cipher-progress{padding:6px;border:1px dashed #5f75c8;border-radius:8px;background:#1a2552}
+#cipher-reward{color:#9ff6ff}
 .battle-stats{padding:4px 6px;border:1px dashed #4d62aa;border-radius:6px;background:#1b2347}
 
 .settings-grid{display:grid;gap:8px}
@@ -77,6 +83,7 @@ body.high-contrast{--panel:#0b0f20;--line:#92a8ff;--text:#ffffff;--accent:#00fff
   .hud{grid-template-columns:1fr 1fr}
   .portrait-card{grid-column:1 / -1}
   .battle{grid-template-columns:1fr}
+  .battle-bottom{grid-template-columns:1fr}
   .side{max-height:320px}
   .drawers{grid-template-columns:1fr}
   .app{height:auto;min-height:100vh;grid-template-rows:auto auto auto}

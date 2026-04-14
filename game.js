@@ -38,9 +38,9 @@
     { name: '蝦趴音浪', icon:'🦐', base: 11, tag: '舒適連動', text: '全場蝦趴，怪物跟著搖。' }
   ];
   const CIPHER_RULES = [
-    { id: 'low_to_high', label: '基礎傷害由低到高', solve: (acts) => [...acts].map((a, i) => ({ i, v: a.base })).sort((a, b) => a.v - b.v).map((x) => x.i) },
-    { id: 'high_to_low', label: '基礎傷害由高到低', solve: (acts) => [...acts].map((a, i) => ({ i, v: a.base })).sort((a, b) => b.v - a.v).map((x) => x.i) },
-    { id: 'name_short_first', label: '招式名稱由短到長', solve: (acts) => [...acts].map((a, i) => ({ i, v: a.name.length })).sort((a, b) => a.v - b.v).map((x) => x.i) }
+    { id: 'low_to_high', title: '📈 升階律動', label: '基礎傷害由低到高', clue: '從暖身到爆發，循序升壓。', reward: '解鎖「超載一擊」x1.6', solve: (acts) => [...acts].map((a, i) => ({ i, v: a.base })).sort((a, b) => a.v - b.v).map((x) => x.i) },
+    { id: 'high_to_low', title: '📉 反拍收束', label: '基礎傷害由高到低', clue: '先猛轟再收尾，壓縮敵方節奏。', reward: '解鎖「超載一擊」x1.6', solve: (acts) => [...acts].map((a, i) => ({ i, v: a.base })).sort((a, b) => b.v - a.v).map((x) => x.i) },
+    { id: 'name_short_first', title: '🧩 字節拼圖', label: '招式名稱由短到長', clue: '短詞開局，長詞終結。', reward: '解鎖「超載一擊」x1.6', solve: (acts) => [...acts].map((a, i) => ({ i, v: a.name.length })).sort((a, b) => a.v - b.v).map((x) => x.i) }
   ];
 
   const state = {
@@ -52,7 +52,7 @@
     inventory: new Map(), equippedId: null, actions: [], missions: [],
     enemy: ENEMIES[0], bossCharge: 0, mode: 'arcade', dead: false, continueTokens: 1,
     messages: [], msgFilter: 'all', stats: { perfect: 0, miss: 0, totalDamage: 0, attacks: 0 }, settings: { assistMode: true, highContrast: false }, metronomeOn: false, audioCtx: null, nextBeat: 0,
-    cipher: { ruleId: '', ruleLabel: '', target: [], input: [], bonusReady: false }
+    cipher: { ruleId: '', title: '', clue: '', ruleLabel: '', reward: '', target: [], input: [], bonusReady: false }
   };
 
   const $ = (id) => document.getElementById(id);
@@ -70,7 +70,8 @@
     filterAll:$('filter-all'), filterCombat:$('filter-combat'), filterLoot:$('filter-loot'), filterSystem:$('filter-system'),
     statPerfect:$('stat-perfect'), statMiss:$('stat-miss'), statDamage:$('stat-damage'),
     assistMode:$('assist-mode'), highContrast:$('high-contrast'),
-    cipherPanel:$('cipher-panel'), cipherRule:$('cipher-rule'), cipherHint:$('cipher-hint'), cipherProgress:$('cipher-progress')
+    cipherPanel:$('cipher-panel'), cipherTitle:$('cipher-title'), cipherRule:$('cipher-rule'), cipherClue:$('cipher-clue'),
+    cipherHint:$('cipher-hint'), cipherProgress:$('cipher-progress'), cipherReward:$('cipher-reward')
   };
 
   const loadProfile = () => {
@@ -143,11 +144,14 @@
     const rand = seededRandom(state.runSeed + state.wave * 503 + state.cycle * 997);
     const rule = CIPHER_RULES[Math.floor(rand() * CIPHER_RULES.length)];
     state.cipher.ruleId = rule.id;
+    state.cipher.title = rule.title;
+    state.cipher.clue = rule.clue;
     state.cipher.ruleLabel = rule.label;
+    state.cipher.reward = rule.reward;
     state.cipher.target = rule.solve(state.actions);
     state.cipher.input = [];
     state.cipher.bonusReady = false;
-    pushMsg('system', `節奏密碼更新：${rule.label}`, true);
+    pushMsg('system', `節奏密碼更新：${rule.title}（${rule.label}）`, true);
   }
 
   function checkCipherInput(selectedIdx, judgeRating) {
@@ -161,10 +165,11 @@
     if (state.cipher.input.length < 3) return;
     const ok = state.cipher.input.every((v, i) => v === state.cipher.target[i]);
     if (ok) {
+      const solvedCombo = state.cipher.target.map((idx) => state.actions[idx].name).join(' → ');
       state.cipher.bonusReady = true;
       state.score += 60;
       state.comfort += 4;
-      pushMsg('system', '密碼破解成功：下次攻擊傷害強化', true);
+      pushMsg('system', `密碼破解成功：${solvedCombo}`, true);
     } else {
       state.hp = Math.max(1, state.hp - 6);
       pushMsg('system', '密碼錯誤：受到反震傷害 -6HP', true);
@@ -276,12 +281,16 @@
     if (el.filterCombat) el.filterCombat.disabled = state.msgFilter === 'combat';
     if (el.filterLoot) el.filterLoot.disabled = state.msgFilter === 'loot';
     if (el.filterSystem) el.filterSystem.disabled = state.msgFilter === 'system';
+    if (el.cipherTitle) el.cipherTitle.textContent = state.cipher.title || '節奏密碼';
     if (el.cipherRule) el.cipherRule.textContent = state.cipher.ruleLabel ? `規則：${state.cipher.ruleLabel}` : '';
-    if (el.cipherHint) el.cipherHint.textContent = `用 3 次命中依規則輸入招式順序。Miss 會重置密碼鏈。`;
+    if (el.cipherClue) el.cipherClue.textContent = `線索：${state.cipher.clue || '觀察招式資訊，找出順序。'}`;
+    if (el.cipherHint) el.cipherHint.textContent = `玩法：連續 3 次命中，依規則輸入順序；Miss 會重置密碼鏈。`;
     if (el.cipherProgress) {
+      const dots = [0,1,2].map((i) => (i < state.cipher.input.length ? '●' : '○')).join(' ');
       const names = state.cipher.input.map((idx) => state.actions[idx]?.name || '?').join(' → ') || '（尚未輸入）';
-      el.cipherProgress.textContent = `當前鏈：${names}${state.cipher.bonusReady ? '｜已解鎖強化攻擊' : ''}`;
+      el.cipherProgress.textContent = `進度 ${dots}｜當前鏈：${names}${state.cipher.bonusReady ? '｜已解鎖強化攻擊' : ''}`;
     }
+    if (el.cipherReward) el.cipherReward.textContent = `獎勵：${state.cipher.reward || '完成密碼可獲得爆發效果。'}`;
   }
 
   function missionTick(type, value) {
