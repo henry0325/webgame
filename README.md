@@ -34,6 +34,7 @@ npm start
 - 將 Sora 輸出的圖片放到：`assets/player_sora.jpg` / `assets/player_sora.png`、`assets/enemy_sora.jpg` / `assets/enemy_sora.png`
 - 遊戲啟動時會自動優先載入這兩張圖，沒有則回退 SVG。
 - 可直接使用 `assets/SORA_PROMPTS.md` 的提示詞生成。
+- 如需本機測試 JPG 覆蓋圖，可執行：`./scripts/generate_local_sora_placeholders.sh`（檔案會被 `.gitignore` 忽略，不會進 PR）。
 
 
 ## PR 二進位檔注意
