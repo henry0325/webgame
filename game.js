@@ -70,16 +70,20 @@
 
   function applySoraArtIfAvailable() {
     const candidates = [
-      { key: 'playerArt', file: 'assets/player_sora.png', fallback: 'assets/player.svg' },
-      { key: 'enemyArt', file: 'assets/enemy_sora.png', fallback: 'assets/enemy.svg' }
+      { key: 'playerArt', files: ['assets/player_sora.jpg', 'assets/player_sora.png'], fallback: 'assets/player.svg' },
+      { key: 'enemyArt', files: ['assets/enemy_sora.jpg', 'assets/enemy_sora.png'], fallback: 'assets/enemy.svg' }
     ];
 
-    candidates.forEach(({ key, file, fallback }) => {
+    candidates.forEach(({ key, files, fallback }) => {
       if (!el[key]) return;
-      const img = new Image();
-      img.onload = () => { el[key].src = file; };
-      img.onerror = () => { el[key].src = fallback; };
-      img.src = file;
+      const tryLoad = (idx) => {
+        if (idx >= files.length) { el[key].src = fallback; return; }
+        const img = new Image();
+        img.onload = () => { el[key].src = files[idx]; };
+        img.onerror = () => tryLoad(idx + 1);
+        img.src = files[idx];
+      };
+      tryLoad(0);
     });
   }
 
@@ -310,11 +314,16 @@
     renderAll();
   };
   el.bpm.oninput = (e) => { state.bpm = Number(e.target.value); renderAll(); };
-  $('mode-arcade').onclick = () => resetRun('arcade');
-  $('mode-daily').onclick = () => resetRun('daily');
-  $('skill-timing').onclick = () => spendSkill('timing');
-  $('skill-guard').onclick = () => spendSkill('guard');
-  $('skill-loot').onclick = () => spendSkill('loot');
+  const arcadeBtn = $('mode-arcade');
+  const dailyBtn = $('mode-daily');
+  const timingBtn = $('skill-timing');
+  const guardBtn = $('skill-guard');
+  const lootBtn = $('skill-loot');
+  if (arcadeBtn) arcadeBtn.onclick = () => resetRun('arcade');
+  if (dailyBtn) dailyBtn.onclick = () => resetRun('daily');
+  if (timingBtn) timingBtn.onclick = () => spendSkill('timing');
+  if (guardBtn) guardBtn.onclick = () => spendSkill('guard');
+  if (lootBtn) lootBtn.onclick = () => spendSkill('loot');
   $('metronome-toggle').onclick = async () => {
     if (!state.audioCtx) state.audioCtx = new AudioContext();
     if (state.audioCtx.state === 'suspended') await state.audioCtx.resume();

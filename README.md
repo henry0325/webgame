@@ -26,11 +26,18 @@ npm start
 
 ## 測試
 
-- `npm test` 會跑邏輯單元測試 + 300 回合遊戲模擬測試（長局穩定性）。
+- `npm test` 會跑邏輯單元測試 + 300 回合遊戲模擬測試（長局穩定性）+ DOM 綁定契約測試（避免元件 ID 對不上造成整頁失效）。
 
 
 ## Sora 美術替換
 
-- 將 Sora 輸出的圖片放到：`assets/player_sora.png`、`assets/enemy_sora.png`
+- 將 Sora 輸出的圖片放到：`assets/player_sora.jpg` / `assets/player_sora.png`、`assets/enemy_sora.jpg` / `assets/enemy_sora.png`
 - 遊戲啟動時會自動優先載入這兩張圖，沒有則回退 SVG。
 - 可直接使用 `assets/SORA_PROMPTS.md` 的提示詞生成。
+
+
+## PR 二進位檔注意
+
+- 本專案預設 **不提交** Sora 產生圖（JPG/PNG）到 Git，以避免部分 PR 工具不支援二進位 diff。
+- 只要把檔案放在本機 `assets/player_sora.jpg` / `assets/enemy_sora.jpg`（或 png）即可被自動載入。
+- 若一定要入版控，建議改用 Git LFS。
