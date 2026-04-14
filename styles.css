@@ -3,8 +3,8 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:"Noto Sans TC",sans-serif;background:radial-gradient(circle at top,#27305a,var(--bg));color:var(--text)}
-body{overflow:auto}
-.app{min-height:100vh;display:grid;grid-template-rows:auto minmax(340px,1fr) auto;gap:8px;padding:8px}
+body{overflow:hidden}
+.app{height:100vh;display:grid;grid-template-rows:minmax(170px,26vh) minmax(300px,1fr) minmax(150px,24vh);gap:8px;padding:8px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;overflow:hidden}
 .hud{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:8px}
 .hud p,.side p,.rhythm p{margin:.2rem 0;line-height:1.4}
@@ -47,9 +47,18 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 .skill-card{display:grid;gap:4px;background:#252f5d;color:#fff;border:1px solid #5c6fbb;text-align:left}
 .skill-card span{font-weight:700;color:#7df9ff}
 .skill-card small{opacity:.85}
-.feed-panel{display:grid;grid-template-rows:auto minmax(84px,1fr);gap:6px;min-height:0}
+.feed-panel{display:grid;grid-template-rows:auto auto;gap:6px;min-height:0}
 .feed-head{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
-.message-feed{height:100%;overflow:auto;border:1px solid #3d4a88;background:#1a1f3c;border-radius:8px;padding:6px;font-size:.85rem;line-height:1.35}
+.message-feed{
+  height:clamp(8.5rem, 18vh, 14rem);
+  overflow:auto;
+  border:1px solid #3d4a88;
+  background:#1a1f3c;
+  border-radius:8px;
+  padding:6px;
+  font-size:.85rem;
+  line-height:1.35;
+}
 .message-item{padding:4px 2px;border-bottom:1px dashed rgba(255,255,255,.12);word-break:break-word}
 .message-item:last-child{border-bottom:none}
 
@@ -61,15 +70,16 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 body.high-contrast{--panel:#0b0f20;--line:#92a8ff;--text:#ffffff;--accent:#00ffff}
 
 @media (max-width: 1100px) {
+  body{overflow:auto}
   .hud{grid-template-columns:1fr 1fr}
   .portrait-card{grid-column:1 / -1}
   .battle{grid-template-columns:1fr}
   .side{max-height:320px}
   .drawers{grid-template-columns:1fr}
+  .app{height:auto;min-height:100vh;grid-template-rows:auto auto auto}
 }
 
 @media (max-width: 720px) {
-  .app{grid-template-rows:auto auto auto}
   .actions{grid-template-columns:1fr}
   .drawer-grid{grid-template-columns:1fr}
   .skill-grid{grid-template-columns:1fr}
