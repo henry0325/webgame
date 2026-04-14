@@ -11,7 +11,7 @@ body{overflow:hidden}
 .portrait-card{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center}
 .portrait-card img{width:100%;height:100%;object-fit:contain;background:linear-gradient(180deg,#f5ecd5,#dac9aa);border-radius:8px;border:1px solid #7b6a4d}
 .battle{display:grid;grid-template-columns:2fr 1fr;gap:8px;min-height:0}
-.rhythm{display:grid;grid-template-rows:auto 34px auto auto auto minmax(110px,1fr) auto auto;gap:8px;min-height:0}
+.rhythm{display:grid;grid-template-rows:auto 34px auto auto auto auto auto auto;gap:8px;min-height:0}
 .rhythm-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .track{position:relative;border:1px solid #4d62aa;border-radius:999px;height:28px;background:linear-gradient(90deg,#2e396d,#212747)}
 .target{position:absolute;left:50%;transform:translateX(-50%);width:16%;height:100%;border-inline:2px solid var(--accent);background:rgba(125,249,255,.2)}
@@ -50,16 +50,16 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 .feed-panel{display:grid;grid-template-rows:auto auto;gap:6px;min-height:0}
 .feed-head{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
 .message-feed{
-  height:clamp(8.5rem, 18vh, 14rem);
+  height:clamp(7rem, 14vh, 11rem);
   overflow:auto;
   border:1px solid #3d4a88;
   background:#1a1f3c;
   border-radius:8px;
   padding:6px;
   font-size:.85rem;
-  line-height:1.35;
+  line-height:1.3;
 }
-.message-item{padding:4px 2px;border-bottom:1px dashed rgba(255,255,255,.12);word-break:break-word}
+.message-item{padding:3px 2px;border-bottom:1px dashed rgba(255,255,255,.12);word-break:break-word}
 .message-item:last-child{border-bottom:none}
 
 .feed-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}

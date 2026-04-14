@@ -42,6 +42,7 @@
     hp: 120, enemyHp: 80, combo: 0, comfort: 20, score: 0,
     bpm: 92, marker: 0, dir: 1, selected: 0,
     wave: 1, cycle: 1, danger: 1,
+    runSeed: Date.now(),
     profile: { level: 1, exp: 0, kills: 0, permBonus: 0, points: 0, skills: { timing: 0, guard: 0, loot: 0 } },
     inventory: new Map(), equippedId: null, actions: [], missions: [],
     enemy: ENEMIES[0], bossCharge: 0, mode: 'arcade', dead: false, continueTokens: 1,
@@ -119,6 +120,18 @@
 
   function itemById(id) { return EQUIPMENT_DB[id]; }
 
+  function drawActionsForCurrentWave() {
+    const pool = [...SKILLS];
+    const seed = state.runSeed + state.cycle * 101 + state.wave * 37;
+    const rand = seededRandom(seed);
+    for (let i = pool.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(rand() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    state.actions = pool.slice(0, 3);
+    state.selected = Math.min(state.selected, state.actions.length - 1);
+  }
+
   function resetRun(mode) {
     state.mode = mode;
     state.hp = 120 + state.profile.level * 2;
@@ -128,9 +141,10 @@
     state.enemy = ENEMIES[0]; state.enemyHp = scaledHp(state.enemy); state.bossCharge = 0;
     state.inventory.clear(); upsertItem('metronome', 1); upsertItem('sorter', 1);
     state.equippedId = null;
-    const rand = seededRandom(mode === 'daily' ? seedFromDate() : Date.now());
+    state.runSeed = mode === 'daily' ? seedFromDate() : Date.now();
+    const rand = seededRandom(state.runSeed);
     state.missions = buildMissions(rand);
-    state.actions = [...SKILLS].sort(() => Math.random() - 0.5).slice(0, 3);
+    drawActionsForCurrentWave();
     state.messages = [];
     state.stats = { perfect: 0, miss: 0, totalDamage: 0, attacks: 0 };
     pushMsg('system', '新冒險開始', true);
@@ -182,7 +196,7 @@
       el.actions.appendChild(n);
     });
     const act = state.actions[state.selected];
-    el.actionDetail.textContent = `快捷鍵 ${state.selected+1}｜${act.name}｜基礎${act.base}｜${act.tag}｜節拍輔助+${tree.timingAssist}`;
+    el.actionDetail.textContent = `快捷鍵 ${state.selected+1}｜${act.name}｜基礎${act.base}｜${act.tag}｜每波招式固定｜節拍輔助+${tree.timingAssist}`;
 
     const eq = state.equippedId ? itemById(state.equippedId) : null;
     el.equipped.textContent = eq ? `${eq.name} (ATK+${eq.atk}, COM+${eq.comfort})` : '尚未裝備';
@@ -256,6 +270,7 @@
     state.enemy = ENEMIES[state.wave - 1];
     state.enemyHp = scaledHp(state.enemy);
     state.bossCharge = 0;
+    drawActionsForCurrentWave();
 
     if (state.settings.assistMode && state.stats.attacks % 20 === 0) {
       const missRate = state.stats.miss / Math.max(1, state.stats.attacks);
@@ -335,7 +350,6 @@
       nextEnemy();
     } else {
       enemyAttack();
-      state.actions = [...SKILLS].sort(() => Math.random() - 0.5).slice(0, 3);
     }
     renderAll();
   }
