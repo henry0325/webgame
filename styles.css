@@ -4,19 +4,19 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:"Noto Sans TC",sans-serif;background:radial-gradient(circle at top,#27305a,var(--bg));color:var(--text)}
 body{overflow:hidden}
-.app{height:100vh;display:grid;grid-template-rows:minmax(170px,26vh) minmax(300px,1fr) minmax(150px,24vh);gap:8px;padding:8px}
+.app{height:100vh;display:grid;grid-template-rows:minmax(180px,28vh) minmax(320px,1fr) minmax(140px,24vh);gap:8px;padding:8px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;overflow:hidden}
 .hud{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:8px}
 .hud p,.side p,.rhythm p{margin:.2rem 0;line-height:1.4}
 .portrait-card{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center}
 .portrait-card img{width:100%;height:100%;object-fit:contain;background:linear-gradient(180deg,#f5ecd5,#dac9aa);border-radius:8px;border:1px solid #7b6a4d}
 .battle{display:grid;grid-template-columns:2fr 1fr;gap:8px;min-height:0}
-.rhythm{display:grid;grid-template-rows:auto 34px auto minmax(56px,auto) auto auto auto auto minmax(190px,1fr) auto;gap:8px;min-height:0}
+.rhythm{display:flex;flex-direction:column;gap:8px;min-height:0}
 .rhythm-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .track{position:relative;border:1px solid #4d62aa;border-radius:999px;height:28px;background:linear-gradient(90deg,#2e396d,#212747)}
 .target{position:absolute;left:50%;transform:translateX(-50%);width:16%;height:100%;border-inline:2px solid var(--accent);background:rgba(125,249,255,.2)}
 .marker{position:absolute;top:0;width:12px;height:100%;background:#fff;border-radius:999px;transform:translateX(-50%)}
-.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;grid-auto-rows:minmax(52px,auto);min-height:0}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;grid-auto-rows:minmax(56px,auto);min-height:56px}
 .action{border:1px solid #4d62aa;padding:10px;border-radius:8px;background:#273160;color:#fff;cursor:pointer;font-weight:700;line-height:1.35;text-align:left}
 .action.selected{border-color:var(--accent);background:rgba(125,249,255,.12)}
 .side{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:8px;min-height:0}
@@ -42,14 +42,15 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 .action .icon{font-size:1.15rem;margin-right:6px}
 .gameover-actions{display:flex;gap:8px;flex-wrap:wrap;padding:6px;border:1px solid #4d62aa;border-radius:8px;background:#1a2245}
 .gameover-actions button{background:#ffd37f;color:#2d2200;font-weight:700}
+.battle-stats,.gameover-actions,.track,.rhythm-top,.actions,#action-detail,#hit-button,#timing-result,#log{flex:none}
 .hidden{display:none}
 #art-source{grid-column:1 / -1;margin:0 0 4px 0}
 
 .skill-card{display:grid;gap:4px;background:#252f5d;color:#fff;border:1px solid #5c6fbb;text-align:left}
 .skill-card span{font-weight:700;color:#7df9ff}
 .skill-card small{opacity:.85}
-.battle-bottom{display:grid;grid-template-columns:1.1fr 1.4fr;gap:8px;min-height:0;height:100%}
-.feed-panel{display:grid;grid-template-rows:auto minmax(0,1fr);gap:6px;min-height:0}
+.battle-bottom{display:grid;grid-template-columns:1.1fr 1.4fr;gap:8px;min-height:180px;flex:1;overflow:hidden}
+.feed-panel{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
 .feed-head{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
 .message-feed{
   height:100%;
@@ -69,7 +70,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 .feed-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .feed-tools button{background:#303c72;color:#fff;font-size:.78rem;padding:4px 8px}
 .cardlike{border:1px solid #3e4f8f;border-radius:8px;background:#202956;padding:8px}
-.cipher-panel{display:grid;grid-template-rows:auto auto auto auto auto;gap:6px;min-height:0;overflow:auto}
+.cipher-panel{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:auto}
 .cipher-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 #cipher-rule{background:#2a3a78;border:1px solid #4f67bc;padding:2px 8px;border-radius:999px}
 #cipher-progress{padding:6px;border:1px dashed #5f75c8;border-radius:8px;background:#1a2552}
