@@ -64,6 +64,12 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 
 .feed-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .feed-tools button{background:#303c72;color:#fff;font-size:.78rem;padding:4px 8px}
+.cardlike{border:1px solid #3e4f8f;border-radius:8px;background:#202956;padding:8px}
+.puzzle-panel{display:grid;gap:6px}
+.puzzle-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.puzzle-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.puzzle-option{background:#2d3a74;color:#fff;border:1px solid #5971ca;text-align:left}
+.puzzle-option.selected{border-color:#7df9ff;background:#284b77}
 .battle-stats{padding:4px 6px;border:1px dashed #4d62aa;border-radius:6px;background:#1b2347}
 
 .settings-grid{display:grid;gap:8px}
@@ -81,6 +87,7 @@ body.high-contrast{--panel:#0b0f20;--line:#92a8ff;--text:#ffffff;--accent:#00fff
 
 @media (max-width: 720px) {
   .actions{grid-template-columns:1fr}
+  .puzzle-options{grid-template-columns:1fr}
   .drawer-grid{grid-template-columns:1fr}
   .skill-grid{grid-template-columns:1fr}
   .mode-row button,.rhythm-top label{width:100%}
