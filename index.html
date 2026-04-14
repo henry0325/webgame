@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>諧音地下城：節奏遠征</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="hud">
+        <div class="card">
+          <h2>玩家</h2>
+          <p>HP <span id="player-hp">120</span></p>
+          <p>連擊 <span id="combo">0</span></p>
+          <p>舒適度 <span id="comfort">20</span> / 狀態 <span id="comfort-tier">Normal</span></p>
+          <p>分數 <span id="score">0</span></p>
+          <p>天賦點 <span id="profile-points">0</span></p>
+          <div class="mode-row">
+            <button id="mode-arcade">標準遠征</button>
+            <button id="mode-daily">每日挑戰</button>
+          </div>
+        </div>
+        <div class="card portrait-card">
+          <p id="art-source" class="small">Art: loading...</p>
+          <img id="player-art" src="assets/player.svg" alt="player" />
+          <img id="enemy-art" src="assets/enemy.svg" alt="enemy" />
+        </div>
+        <div class="card">
+          <h2>敵人</h2>
+          <p id="enemy-name">鴨力山大魔王</p>
+          <p>HP <span id="enemy-hp">70</span></p>
+          <p>波次 <span id="wave">1</span> / 危險度 <span id="danger">1.00x</span></p>
+          <p id="enemy-line">今天你有多鴨力？</p>
+          <p id="boss-alert" class="small"></p>
+        </div>
+      </section>
+
+      <section class="battle">
+        <div class="rhythm card" id="rhythm-panel">
+          <div class="rhythm-top">
+            <strong>節奏戰鬥</strong>
+            <label>BPM <input id="bpm-input" type="range" min="70" max="160" value="92" /><span id="bpm-value">92</span></label>
+            <span>倍率 <span id="bpm-bonus">1.00x</span></span>
+            <button id="metronome-toggle">節拍音</button>
+          </div>
+          <div class="track">
+            <div class="target"></div>
+            <div id="beat-marker" class="marker"></div>
+          </div>
+          <div class="actions" id="actions"></div>
+          <p id="action-detail" class="small"></p>
+          <button id="hit-button" class="primary">出招（Space/Enter）</button>
+          <p id="timing-result">等待輸入</p>
+          <p id="log" class="small"></p>
+          <section class="feed-panel" aria-label="戰鬥訊息">
+            <div class="feed-head">
+              <strong>戰鬥訊息</strong>
+              <div class="feed-tools">
+                <button id="filter-all">全部</button>
+                <button id="filter-combat">戰鬥</button>
+                <button id="filter-loot">裝備</button>
+                <button id="filter-system">系統</button>
+              </div>
+            </div>
+            <div id="message-feed" class="message-feed" role="log" aria-live="polite"></div>
+          </section>
+          <section id="cipher-panel" class="cipher-panel cardlike" aria-label="節奏密碼">
+            <div class="cipher-head">
+              <strong>節奏密碼</strong>
+              <span id="cipher-rule" class="small"></span>
+            </div>
+            <p id="cipher-hint" class="small"></p>
+            <p id="cipher-progress" class="small"></p>
+          </section>
+          <div class="battle-stats small">Perfect <span id="stat-perfect">0</span>｜Miss <span id="stat-miss">0</span>｜總傷害 <span id="stat-damage">0</span></div>
+          <div id="gameover-actions" class="gameover-actions hidden">
+            <button id="continue-button">消耗1次重整續關</button>
+            <button id="restart-button">重新開始</button>
+          </div>
+        </div>
+
+        <aside class="side card">
+          <h3>已裝備</h3>
+          <p id="equipped">尚未裝備</p>
+          <p id="equip-detail" class="small"></p>
+          <div id="inventory" class="inventory"></div>
+          <button id="sort-button">整理背包</button>
+        </aside>
+      </section>
+
+      <section class="drawers">
+        <details open>
+          <summary>成長與任務</summary>
+          <div class="drawer-grid">
+            <div>
+              <p>等級 <span id="profile-level">1</span> / 經驗 <span id="profile-exp">0</span></p>
+              <p>總擊敗 <span id="profile-kills">0</span> / 永久加成 <span id="profile-bonus">0</span></p>
+              <p>每日最高分 <span id="daily-best">0</span></p>
+              <p id="mode-note" class="small">標準遠征</p>
+            </div>
+            <div id="missions"></div>
+          </div>
+        </details>
+        <details>
+          <summary>天賦樹</summary>
+          <div class="skill-grid">
+            <button class="skill-card" id="skill-timing"><strong>節拍專注</strong><span id="skill-timing-lv">Lv.0</span><small>放寬判定窗</small></button>
+            <button class="skill-card" id="skill-guard"><strong>抗壓心流</strong><span id="skill-guard-lv">Lv.0</span><small>降低受傷</small></button>
+            <button class="skill-card" id="skill-loot"><strong>掉寶手感</strong><span id="skill-loot-lv">Lv.0</span><small>提高掉落品質</small></button>
+          </div>
+        </details>
+
+        <details>
+          <summary>系統設定（自動建議版）</summary>
+          <div class="settings-grid small">
+            <label><input id="assist-mode" type="checkbox" checked /> 智慧輔助（自動調整難度）</label>
+            <label><input id="high-contrast" type="checkbox" /> 高對比模式</label>
+            <p>鍵位：1/2/3 選招，Space/Enter 出招</p>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <script src="logic.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>
