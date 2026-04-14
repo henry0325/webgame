@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "node test/logic.test.js",
+    "test": "node test/logic.test.js && node test/gameplay.sim.test.js",
     "start": "python3 -m http.server 8080"
   }
 }
