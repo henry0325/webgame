@@ -90,8 +90,8 @@
   }
 
   function pushMsg(type, text, pinned = false) {
-    state.messages.unshift({ type, text, pinned, ts: Date.now() });
-    state.messages = state.messages.slice(0, 40);
+    state.messages.push({ type, text, pinned, ts: Date.now() });
+    state.messages = state.messages.slice(-80);
   }
 
   function applySoraArtIfAvailable() {
@@ -214,8 +214,13 @@
     if (el.gameoverActions) el.gameoverActions.classList.toggle('hidden', !state.dead);
     if (el.messageFeed) {
       const filtered = state.messages.filter((m) => state.msgFilter === 'all' || m.type === state.msgFilter || m.pinned);
-      el.messageFeed.innerHTML = filtered.map((m) => `<div class=\"message-item\">[${m.type}] ${m.text}</div>`).join('');
+      el.messageFeed.innerHTML = filtered.map((m) => `<div class=\"message-item\"><strong>[${m.type}]</strong> ${m.text}</div>`).join('');
+      el.messageFeed.scrollTop = el.messageFeed.scrollHeight;
     }
+    if (el.filterAll) el.filterAll.disabled = state.msgFilter === 'all';
+    if (el.filterCombat) el.filterCombat.disabled = state.msgFilter === 'combat';
+    if (el.filterLoot) el.filterLoot.disabled = state.msgFilter === 'loot';
+    if (el.filterSystem) el.filterSystem.disabled = state.msgFilter === 'system';
   }
 
   function missionTick(type, value) {

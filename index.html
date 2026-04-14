@@ -53,13 +53,18 @@
           <button id="hit-button" class="primary">出招（Space/Enter）</button>
           <p id="timing-result">等待輸入</p>
           <p id="log" class="small"></p>
-          <div class="feed-tools">
-            <button id="filter-all">全部</button>
-            <button id="filter-combat">戰鬥</button>
-            <button id="filter-loot">裝備</button>
-            <button id="filter-system">系統</button>
-          </div>
-          <div id="message-feed" class="message-feed"></div>
+          <section class="feed-panel" aria-label="戰鬥訊息">
+            <div class="feed-head">
+              <strong>戰鬥訊息</strong>
+              <div class="feed-tools">
+                <button id="filter-all">全部</button>
+                <button id="filter-combat">戰鬥</button>
+                <button id="filter-loot">裝備</button>
+                <button id="filter-system">系統</button>
+              </div>
+            </div>
+            <div id="message-feed" class="message-feed" role="log" aria-live="polite"></div>
+          </section>
           <div class="battle-stats small">Perfect <span id="stat-perfect">0</span>｜Miss <span id="stat-miss">0</span>｜總傷害 <span id="stat-damage">0</span></div>
           <div id="gameover-actions" class="gameover-actions hidden">
             <button id="continue-button">消耗1次重整續關</button>
