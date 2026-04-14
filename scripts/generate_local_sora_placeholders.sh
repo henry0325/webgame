@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mkdir -p assets
+cat <<'B64' | base64 -d > assets/player_sora.jpg
+/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBUQEA8QDw8QDw8QDw8PDw8PDw8PFREWFhURFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDg0OGxAQGy0lICYtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAAEAAQMBEQACEQEDEQH/xAAXAAEBAQEAAAAAAAAAAAAAAAABAgAD/8QAFhEBAQEAAAAAAAAAAAAAAAAAAAER/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdAB//2Q==
+B64
+cp assets/player_sora.jpg assets/enemy_sora.jpg
+
+echo "Generated local placeholders: assets/player_sora.jpg, assets/enemy_sora.jpg"
