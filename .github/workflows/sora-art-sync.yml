@@ -1,0 +1,35 @@
+name: sora-art-sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "player or enemy"
+        required: true
+        default: "player"
+
+jobs:
+  fetch-art:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate secrets
+        run: |
+          test -n "${{ secrets.SORA_IMAGE_ENDPOINT }}"
+          test -n "${{ secrets.SORA_API_KEY }}"
+
+      - name: Request generated image from your Sora-compatible endpoint
+        run: |
+          FILE="assets/${{ github.event.inputs.target }}_sora.jpg"
+          curl -sS -X POST "${{ secrets.SORA_IMAGE_ENDPOINT }}" \
+            -H "Authorization: Bearer ${{ secrets.SORA_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"prompt\":\"${{ github.event.inputs.target }} art\",\"size\":\"1024x1024\"}" \
+            --output "$FILE"
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sora-image
+          path: assets/*_sora.jpg
