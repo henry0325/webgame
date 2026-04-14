@@ -22,6 +22,7 @@
           </div>
         </div>
         <div class="card portrait-card">
+          <p id="art-source" class="small">Art: loading...</p>
           <img id="player-art" src="assets/player.svg" alt="player" />
           <img id="enemy-art" src="assets/enemy.svg" alt="enemy" />
         </div>
@@ -52,6 +53,18 @@
           <button id="hit-button" class="primary">出招（Space/Enter）</button>
           <p id="timing-result">等待輸入</p>
           <p id="log" class="small"></p>
+          <div class="feed-tools">
+            <button id="filter-all">全部</button>
+            <button id="filter-combat">戰鬥</button>
+            <button id="filter-loot">裝備</button>
+            <button id="filter-system">系統</button>
+          </div>
+          <div id="message-feed" class="message-feed"></div>
+          <div class="battle-stats small">Perfect <span id="stat-perfect">0</span>｜Miss <span id="stat-miss">0</span>｜總傷害 <span id="stat-damage">0</span></div>
+          <div id="gameover-actions" class="gameover-actions hidden">
+            <button id="continue-button">消耗1次重整續關</button>
+            <button id="restart-button">重新開始</button>
+          </div>
         </div>
 
         <aside class="side card">
@@ -79,9 +92,18 @@
         <details>
           <summary>天賦樹</summary>
           <div class="skill-grid">
-            <button id="skill-timing">節拍專注</button>
-            <button id="skill-guard">抗壓心流</button>
-            <button id="skill-loot">掉寶手感</button>
+            <button class="skill-card" id="skill-timing"><strong>節拍專注</strong><span id="skill-timing-lv">Lv.0</span><small>放寬判定窗</small></button>
+            <button class="skill-card" id="skill-guard"><strong>抗壓心流</strong><span id="skill-guard-lv">Lv.0</span><small>降低受傷</small></button>
+            <button class="skill-card" id="skill-loot"><strong>掉寶手感</strong><span id="skill-loot-lv">Lv.0</span><small>提高掉落品質</small></button>
+          </div>
+        </details>
+
+        <details>
+          <summary>系統設定（自動建議版）</summary>
+          <div class="settings-grid small">
+            <label><input id="assist-mode" type="checkbox" checked /> 智慧輔助（自動調整難度）</label>
+            <label><input id="high-contrast" type="checkbox" /> 高對比模式</label>
+            <p>鍵位：1/2/3 選招，Space/Enter 出招</p>
           </div>
         </details>
       </section>

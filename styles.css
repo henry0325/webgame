@@ -15,7 +15,7 @@ html,body{height:100%;margin:0;overflow:hidden;font-family:"Noto Sans TC",sans-s
 .target{position:absolute;left:50%;transform:translateX(-50%);width:16%;height:100%;border-inline:2px solid var(--accent);background:rgba(125,249,255,.2)}
 .marker{position:absolute;top:0;width:12px;height:100%;background:#fff;border-radius:999px;transform:translateX(-50%)}
 .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;min-height:0}
-.action{border:1px solid #4d62aa;padding:8px;border-radius:8px;background:rgba(255,255,255,.03);cursor:pointer}
+.action{border:1px solid #4d62aa;padding:10px;border-radius:8px;background:#273160;color:#fff;cursor:pointer;font-weight:700;line-height:1.35;text-align:left}
 .action.selected{border-color:var(--accent);background:rgba(125,249,255,.12)}
 .side{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:8px;min-height:0}
 .inventory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;overflow:auto}
@@ -36,3 +36,22 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 
 .mode-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
 .mode-row button{background:#2a3568;color:#eef3ff}
+
+.action .icon{font-size:1.15rem;margin-right:6px}
+.gameover-actions{display:flex;gap:8px;flex-wrap:wrap}
+.hidden{display:none}
+#art-source{grid-column:1 / -1;margin:0 0 4px 0}
+
+.skill-card{display:grid;gap:4px;background:#252f5d;color:#fff;border:1px solid #5c6fbb;text-align:left}
+.skill-card span{font-weight:700;color:#7df9ff}
+.skill-card small{opacity:.85}
+.message-feed{max-height:72px;overflow:auto;border:1px solid #3d4a88;background:#1a1f3c;border-radius:8px;padding:6px;font-size:.8rem;line-height:1.3}
+.message-item{padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.12)}
+.message-item:last-child{border-bottom:none}
+
+.feed-tools{display:flex;gap:6px;flex-wrap:wrap}
+.feed-tools button{background:#303c72;color:#fff;font-size:.78rem;padding:4px 8px}
+.battle-stats{padding:4px 6px;border:1px dashed #4d62aa;border-radius:6px;background:#1b2347}
+
+.settings-grid{display:grid;gap:8px}
+body.high-contrast{--panel:#0b0f20;--line:#92a8ff;--text:#ffffff;--accent:#00ffff}
