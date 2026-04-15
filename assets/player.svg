@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5ecd5"/>
+      <stop offset="1" stop-color="#e9dcc0"/>
+    </linearGradient>
+    <filter id="ink" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="17"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feBlend mode="multiply" in2="SourceGraphic"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.18"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="34" fill="url(#paper)"/>
+  <path d="M44 92q215-76 423 0" fill="none" stroke="#2a2418" stroke-width="9" stroke-linecap="round"/>
+  <path d="M92 446q170 40 328 0" fill="none" stroke="#2a2418" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- 山海經感：鹿角魚尾笑面獸 -->
+  <path d="M148 260q-38-78 24-126q62-48 166-24q96 22 112 112q16 90-44 154q-58 62-170 52q-112-10-126-168z"
+        fill="#d9c8a6" stroke="#1f1a12" stroke-width="7"/>
+  <path d="M170 182l-40-52m54 30l-62-24m200 40l42-58m-38 74l70-26"
+        fill="none" stroke="#241d14" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- 搞笑元素：墨鏡 + 鯉魚鬍子 -->
+  <rect x="185" y="208" width="56" height="30" rx="8" fill="#1b1b1b"/>
+  <rect x="258" y="208" width="56" height="30" rx="8" fill="#1b1b1b"/>
+  <rect x="241" y="218" width="18" height="8" rx="4" fill="#1b1b1b"/>
+  <path d="M214 286q42 28 84 0" fill="none" stroke="#7d2f2f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M198 294q-18 8-28 24m144-24q20 8 30 24" fill="none" stroke="#1d1710" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- 魚尾與符咒 -->
+  <path d="M328 362q56 14 82 52q-66 12-108-24z" fill="#8bb8c9" stroke="#1f1a12" stroke-width="6"/>
+  <path d="M112 314q-34 10-48 44q48 6 74-20z" fill="#8bb8c9" stroke="#1f1a12" stroke-width="6"/>
+  <path d="M236 360l36 0m-18-18l0 36" stroke="#b43e2b" stroke-width="7"/>
+
+  <g filter="url(#ink)">
+    <path d="M86 72q166-46 340 0" fill="none" stroke="#000" stroke-width="4"/>
+    <path d="M80 436q174 28 352 0" fill="none" stroke="#000" stroke-width="4"/>
+  </g>
+</svg>
