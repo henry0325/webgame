@@ -49,8 +49,8 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 .skill-card{display:grid;gap:4px;background:#252f5d;color:#fff;border:1px solid #5c6fbb;text-align:left}
 .skill-card span{font-weight:700;color:#7df9ff}
 .skill-card small{opacity:.85}
-.battle-bottom{display:grid;grid-template-columns:1.1fr 1.4fr;gap:8px;min-height:180px;flex:1;overflow:hidden}
-.feed-panel{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
+.battle-bottom{display:grid;grid-template-columns:1.1fr 1.4fr;gap:8px;min-height:0;height:clamp(130px,26vh,220px);flex:none;overflow:hidden}
+.feed-panel{display:flex;flex-direction:column;gap:6px;min-height:0;min-width:0;overflow:hidden}
 .feed-head{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
 .message-feed{
   height:100%;
@@ -67,10 +67,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background-im
 .message-item{padding:3px 2px;border-bottom:1px dashed rgba(255,255,255,.12);word-break:break-word}
 .message-item:last-child{border-bottom:none}
 
-.feed-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.feed-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;min-width:0}
 .feed-tools button{background:#303c72;color:#fff;font-size:.78rem;padding:4px 8px}
 .cardlike{border:1px solid #3e4f8f;border-radius:8px;background:#202956;padding:8px}
-.cipher-panel{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:auto}
+.cipher-panel{display:flex;flex-direction:column;gap:6px;min-height:0;min-width:0;overflow:auto}
 .cipher-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 #cipher-rule{background:#2a3a78;border:1px solid #4f67bc;padding:2px 8px;border-radius:999px}
 #cipher-progress{padding:6px;border:1px dashed #5f75c8;border-radius:8px;background:#1a2552}
